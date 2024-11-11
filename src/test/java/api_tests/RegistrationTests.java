@@ -3,7 +3,7 @@ package api_tests;
 import config.AuthenticationController;
 import dto.ErrorMessageDto;
 import dto.UserDto;
-import dto.UserDtoLombok;
+//import dto.UserDtoLombok;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;

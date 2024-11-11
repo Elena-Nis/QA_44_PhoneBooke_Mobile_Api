@@ -1,6 +1,5 @@
 package screens;
 
-import config.AppiumConfig;
 import dto.UserDto;
 import dto.UserDtoLombok;
 import io.appium.java_client.AppiumDriver;
