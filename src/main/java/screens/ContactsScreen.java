@@ -23,11 +23,11 @@ public class ContactsScreen extends BaseScreen {
     public int height;
     public int width;
 
-    public ContactsScreen(AppiumDriver<AndroidElement> driver) {
-        super(driver);
-        height = driver.manage().window().getSize().getHeight();
-        width = driver.manage().window().getSize().getWidth();
-    }
+        public ContactsScreen(AppiumDriver<AndroidElement> driver) {
+            super(driver);
+            height = driver.manage().window().getSize().getHeight();
+            width = driver.manage().window().getSize().getWidth();
+        }
 
     @FindBy(xpath = "//*[@text='Contact list']")
     AndroidElement textContactList;
@@ -139,5 +139,17 @@ public class ContactsScreen extends BaseScreen {
             }
         }
         return unuqueContacts.size();
+    }
+
+    public void editContact() {
+        pause(5);
+        int xLeftUpCorner = firstElementContactsList.getLocation().getX();
+        int yLeftUpCorner = firstElementContactsList.getLocation().getY();
+        int heightElement = firstElementContactsList.getSize().getHeight();
+        int wightElement = firstElementContactsList.getSize().getWidth();
+        TouchAction<?> touchAction = new TouchAction(driver);
+        touchAction.longPress(PointOption.point((xLeftUpCorner+wightElement) * 5 / 6, (yLeftUpCorner + heightElement / 2)))
+                .moveTo(PointOption.point((xLeftUpCorner+wightElement)/6, (yLeftUpCorner + heightElement / 2)))
+                .release().perform();
     }
 }
