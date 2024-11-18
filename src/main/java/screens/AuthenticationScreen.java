@@ -12,7 +12,7 @@ public class AuthenticationScreen extends BaseScreen {
     }
 
     @FindBy(xpath = "//*[@resource-id='com.sheygam.contactapp:id/inputEmail']")
-  //  @FindBy(id = "com.sheygam.contactapp:id/inputEmail")
+    //  @FindBy(id = "com.sheygam.contactapp:id/inputEmail")
     AndroidElement inputEmail;
     @FindBy(xpath = "//*[@resource-id='com.sheygam.contactapp:id/inputPassword']")
     // @FindBy(id="com.sheygam.contactapp:id/inputPassword")

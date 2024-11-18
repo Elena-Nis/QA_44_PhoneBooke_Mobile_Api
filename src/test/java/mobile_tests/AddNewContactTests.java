@@ -1,6 +1,8 @@
 package mobile_tests;
 
 import config.AppiumConfig;
+import data_provider.ContactDP;
+import data_provider.ContactDPTwoArray;
 import dto.ContactDtoLombok;
 import dto.ContactsDto;
 import dto.ErrorMessageDto;
@@ -13,6 +15,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import screens.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static helper.PropertiesReader.getProperty;
 import static helper.RandomUtils.*;
@@ -68,15 +73,18 @@ public class AddNewContactTests extends AppiumConfig {
         helperApiMobile.login(user.getUsername(), user.getPassword());
         Response responseGet = helperApiMobile.getUserContactsResponse();
         ContactsDto contactsDto = responseGet.as(ContactsDto.class);
-        boolean flag = false;
-        for (ContactDtoLombok c : contactsDto.getContacts()) {
-            if (c.equals(contact)) {
-                flag = true;
-                break;
-            }
-        }
-        System.out.println("--> " + flag);
-        Assert.assertTrue(flag);
+//        boolean flag = false;
+//        for (ContactDtoLombok c : contactsDto.getContacts()) {
+//            if (c.equals(contact)) {
+//                flag = true;
+//                break;
+//            }
+//        }
+//        System.out.println("--> " + flag);
+//        Assert.assertTrue(flag);
+        int numberContact = Arrays.asList(contactsDto.getContacts()).indexOf(contact);
+        System.out.println(numberContact);
+        Assert.assertTrue(numberContact != -1);
     }
 
     // **************** HW19 ******************
@@ -679,6 +687,50 @@ public class AddNewContactTests extends AppiumConfig {
         softAssert.assertTrue(responseBody.contains("\"email\":\"must be a well-formed email address\""));
 
         softAssert.assertAll();
+
+    }
+
+    //Alexey's tests
+
+    @Test(dataProvider = "addNewContactDPFile", dataProviderClass = ContactDPTwoArray.class)
+    public void addNewContactNegativeTest_emptyField(ContactDtoLombok contact) {
+        addNewContactsScreen.typeContactForm(contact);
+        addNewContactsScreen.clickBtnCreateContact();
+        ErrorScreen errorScreen = new ErrorScreen(driver);
+        List<String> expectedMessages = Arrays.asList("must not be blank", "Phone number must contain only digits! And length min 10, max 15!");
+        boolean isAnyMessageValid = false;
+        for (String message : expectedMessages) {
+            if (errorScreen.validateErrorMessage(message, 2)) {
+                isAnyMessageValid = true;
+            }
+        }
+//        Assert.assertTrue(new ErrorScreen(driver).validateErrorMessage("must not be blank", 5)
+//                || new ErrorScreen(driver).validateErrorMessage("well-formed email address", 5)
+//                || new ErrorScreen(driver).validateErrorMessage("Phone number must contain", 5));
+        Assert.assertTrue(isAnyMessageValid);
+
+    }
+
+    @Test
+    public void addNewContactNegativeTest_duplicateContact() {
+        HelperApiMobile helperApiMobile = new HelperApiMobile();
+        helperApiMobile.login(user.getUsername(), user.getPassword());
+        Response responseGet = helperApiMobile.getUserContactsResponse();
+        if (responseGet.getStatusCode() == 200) {
+            ContactsDto contactsDto = responseGet.as(ContactsDto.class);
+            ContactDtoLombok contactApi = contactsDto.getContacts()[0];
+            ContactDtoLombok contact = ContactDtoLombok.builder()
+                    .name(contactApi.getName())
+                    .lastName(contactApi.getLastName())
+                    .email(contactApi.getEmail())
+                    .phone(contactApi.getPhone())
+                    .address(contactApi.getAddress())
+                    .description(contactApi.getDescription())
+                    .build();
+            addNewContactsScreen.typeContactForm(contact);
+            addNewContactsScreen.clickBtnCreateContact();
+            Assert.assertTrue(new ErrorScreen(driver).validateErrorMessage("duplicate contact", 5));
+        }
 
     }
 }

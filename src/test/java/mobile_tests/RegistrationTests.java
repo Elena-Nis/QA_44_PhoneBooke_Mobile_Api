@@ -93,4 +93,7 @@ public class RegistrationTests extends AppiumConfig {
         softAssert.assertAll();
     }
 
+
+
+
 }

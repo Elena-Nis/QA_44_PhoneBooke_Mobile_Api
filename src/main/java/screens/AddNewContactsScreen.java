@@ -5,7 +5,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.support.FindBy;
 
-public class AddNewContactsScreen extends BaseScreen{
+public class AddNewContactsScreen extends BaseScreen {
     public AddNewContactsScreen(AppiumDriver<AndroidElement> driver) {
         super(driver);
     }

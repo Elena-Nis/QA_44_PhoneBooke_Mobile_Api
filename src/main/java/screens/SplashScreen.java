@@ -34,4 +34,18 @@ public class SplashScreen extends BaseScreen {
             System.out.println("element Authentication not find");
         }
     }
+
+    public boolean validateSplashScreenToDisappear(long expectedTime) {
+        long startTime = System.currentTimeMillis();
+        long endTime = 0;
+        pause(1);
+        if (new WebDriverWait(driver, 10)
+                .until(ExpectedConditions.invisibilityOf(versionApp)))
+            endTime = System.currentTimeMillis();
+        long splashDuration = endTime - startTime -1000;
+        System.out.println("--> " + splashDuration);
+        if (splashDuration <= expectedTime)
+            return true;
+        else return false;
+    }
 }

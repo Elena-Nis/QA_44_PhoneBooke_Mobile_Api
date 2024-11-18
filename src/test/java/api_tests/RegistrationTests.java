@@ -48,5 +48,7 @@ public class RegistrationTests extends AuthenticationController {
         softAssert.assertEquals(response.getStatusCode(), 409);
         softAssert.assertAll();
     }
+
+
 }
 
