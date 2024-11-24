@@ -56,6 +56,7 @@ public class DeleteContactTest extends AppiumConfig {
         ContactsDto contactsDtoAfter = responseGetAfter.as(ContactsDto.class);
         int quantityContactsAfterDelete = contactsDtoAfter.getContacts().length;
         System.out.println(quantityContactsBeforeDelete + "X" + quantityContactsAfterDelete);
+        Assert.assertEquals(quantityContactsBeforeDelete, quantityContactsAfterDelete+1);
     }
 
     @Test

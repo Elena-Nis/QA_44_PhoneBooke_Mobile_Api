@@ -21,6 +21,8 @@ public class AuthenticationScreen extends BaseScreen {
     AndroidElement btnRegistartion;
     @FindBy(id = "com.sheygam.contactapp:id/loginBtn")
     AndroidElement btnLogin;
+    @FindBy(xpath = "//android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/android.widget.TextView")
+    AndroidElement textAuthentication;
 
 
     public void typeAuthenticationForm(UserDtoLombok user) {
@@ -40,5 +42,9 @@ public class AuthenticationScreen extends BaseScreen {
 
     public void clickBtnLogin() {
         btnLogin.click();
+    }
+
+    public boolean isAuthScreenOpen(){
+        return textInElementPresent(textAuthentication, "Authentication", 5);
     }
 }

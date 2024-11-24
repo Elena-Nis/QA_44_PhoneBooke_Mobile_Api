@@ -3,11 +3,13 @@ package mobile_tests;
 import config.AppiumConfig;
 import data_provider.ContactDP;
 import data_provider.ContactDPTwoArray;
+import data_provider.ContactDP_EditContact;
 import dto.ContactDtoLombok;
 import dto.ContactsDto;
 import dto.ErrorMessageDto;
 import dto.UserDtoLombok;
 import helper.HelperApiMobile;
+import helper.RetryAnalyzer;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -30,6 +32,7 @@ public class AddNewContactTests extends AppiumConfig {
     AddNewContactsScreen addNewContactsScreen;
     HelperApiMobile helperApiMobile;
     SoftAssert softAssert = new SoftAssert();
+    ContactsScreen contactsScreen;
 
     @BeforeMethod
     public void loginAndGoToAddNewContactScreen() {
@@ -690,9 +693,27 @@ public class AddNewContactTests extends AppiumConfig {
 
     }
 
-    //Alexey's tests
+    @Test
+    public void addNewContactPositiveTestValidateUIListContact() {
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name("!!!!" + generateString(2))
+                .lastName(generateString(10))
+                .email(generateEmail(10))
+                .phone(generatePhone(12))
+                .address(generateString(8) + " app." + generatePhone(2))
+                .description(generateString(15))
+                .build();
+        addNewContactsScreen.typeContactForm(contact);
+        addNewContactsScreen.clickBtnCreateContact();
+        contactsScreen = new ContactsScreen(driver);
+        softAssert.assertTrue(contactsScreen.validatePopMessage());
+        softAssert.assertTrue(contactsScreen.validateUIListContact(contact));
+        softAssert.assertAll();
+    }
 
-    @Test(dataProvider = "addNewContactDPFile", dataProviderClass = ContactDPTwoArray.class)
+    //HW 21+22
+
+    @Test(dataProvider = "addNewContactDPFile", dataProviderClass = ContactDPTwoArray.class, retryAnalyzer = RetryAnalyzer.class)
     public void addNewContactNegativeTest_emptyField(ContactDtoLombok contact) {
         addNewContactsScreen.typeContactForm(contact);
         addNewContactsScreen.clickBtnCreateContact();
@@ -704,9 +725,6 @@ public class AddNewContactTests extends AppiumConfig {
                 isAnyMessageValid = true;
             }
         }
-//        Assert.assertTrue(new ErrorScreen(driver).validateErrorMessage("must not be blank", 5)
-//                || new ErrorScreen(driver).validateErrorMessage("well-formed email address", 5)
-//                || new ErrorScreen(driver).validateErrorMessage("Phone number must contain", 5));
         Assert.assertTrue(isAnyMessageValid);
 
     }

@@ -28,7 +28,7 @@ public class BaseScreen {
     public boolean textInElementPresent(AndroidElement element, String text, int time) {
         try {
             return new WebDriverWait(driver, time)
-                    .until(ExpectedConditions.textToBePresentInElement(element, text));
+                   .until(ExpectedConditions.textToBePresentInElement(element, text));
         } catch (TimeoutException e) {
             System.out.println("create exception");
             e.printStackTrace();
@@ -36,11 +36,11 @@ public class BaseScreen {
         }
     }
 
-    public void clickWait(WebElement element, int time){
+    public void clickWait(WebElement element, int time) {
         try {
             new WebDriverWait(driver, time)
                     .until(ExpectedConditions.elementToBeClickable(element)).click();
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             System.out.println("create exception");
             e.printStackTrace();
         }
